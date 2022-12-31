@@ -4,8 +4,11 @@ import win32com.client as win32
 import py_win_keyboard_layout
 import pyautogui as pag
 import pyautogui
+import logging
 import time
 import os
+
+logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s')
 
 def Ors():  # Работа с ORS
     link = 'http://ors/ors/atm/promise.html'
@@ -71,6 +74,7 @@ while start:
         Outlook()
         Delete()
     except:
+        logging.exception(Ors)
         os.system("taskkill /f /im msedgedriver.exe")
         os.system("taskkill /f /im EXCEL.exe") 
         time.sleep(10)
