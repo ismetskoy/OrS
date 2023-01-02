@@ -76,6 +76,7 @@ while start:
     except:
         logging.exception(Ors)
         os.system("taskkill /f /im msedgedriver.exe")
+        os.system("taskkill /f /im msedge.exe")
         os.system("taskkill /f /im EXCEL.exe") 
         time.sleep(10)
         pass
