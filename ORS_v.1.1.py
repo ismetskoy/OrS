@@ -48,7 +48,7 @@ def Excel():  # Работа с excel
 def Outlook():  # Отправка в Outlook
     outlook = win32.Dispatch('outlook.application')
     mail = outlook.CreateItem(0)
-    mail.To = '' # Почта
+    mail.To = ''  # Почта
     mail.Subject = 'Расчет ORS'
     mail.Body = 'Расчет ORS на текущую Дату'
     mail.HTMLBody = '<h2>Расчет ORS на текущую Дату</h2>'
