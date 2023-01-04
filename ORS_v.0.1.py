@@ -31,7 +31,7 @@ time.sleep(5)
 
 outlook = win32.Dispatch('outlook.application')
 mail = outlook.CreateItem(0)
-mail.To = 'AAZaporozhets@alfabank.ru'
+mail.To = '' # Почта
 mail.Subject = 'Расчет ORS'
 mail.Body = 'Расчет ORS на текущую Дату'
 mail.HTMLBody = '<h2>Расчет ORS на текущую Дату</h2>'
