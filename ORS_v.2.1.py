@@ -30,7 +30,7 @@ def ORS():  # Работа с ORS
 
 def EXL(): # Работа с EXl
     try:
-        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_1672*.xlsx')) # Поиск
+        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_167*.xlsx')) # Поиск
         for ors in fileors:
             pass
             xlApp = win32.Dispatch('Excel.Application')
@@ -49,7 +49,7 @@ def EXL(): # Работа с EXl
             
 def Out():  # Отправка в Outlook
     try:
-        fileout = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/ORS_*.xlsx')) # Поиск
+        fileout = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS_*.xlsx')) # Поиск
         for out in fileout:
             pass
         fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads', 'ORS.pdf')) # Поиск
@@ -78,13 +78,13 @@ def Out():  # Отправка в Outlook
 def Delete():  # Удаление лишнего
     try:
         time.sleep(60)
-        fileout = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/ORS_*.xlsx')) # Поиск
+        fileout = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS_*.xlsx')) # Поиск
         for out in fileout:
             pass
-        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads', 'ORS.pdf')) # Поиск
+        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS.pdf')) # Поиск
         for pdf in fileors:
             pass
-        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_1672*.xlsx')) # Поиск
+        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_167*.xlsx')) # Поиск
         for ors in fileors:
             pass
         os.remove(ors)
