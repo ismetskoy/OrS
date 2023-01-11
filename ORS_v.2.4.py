@@ -1,14 +1,16 @@
 from selenium.webdriver.common.by import By
+from datetime import datetime, timedelta
 from selenium import webdriver
 from threading import Thread
 from pathlib import *
-import os , glob , time , logging , py_win_keyboard_layout , win32com.client as win32
+import os , glob , time , logging  , win32com.client as win32
 
 logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
-py_win_keyboard_layout.change_foreground_window_keyboard_layout(0x04090409)  # Смена языка на EN
+
+day =  (datetime.now().replace(microsecond=0) + timedelta(days=-1))  # Дата
 
 def TimeEXL(): # Kill EXCEL
-    time.sleep(90)
+    time.sleep(120)
     os.system("taskkill /f /im EXCEL.exe")
 
 def Poisk(): # Ожидание загрузки файлы detail
@@ -57,7 +59,7 @@ def EXL(): # Работа с EXl
         wb = xlApp.Workbooks.Open(det)
         xlApp.Visible = False
         xlApp.Run('PERSONAL.XLSB!ORS_v_4_1') # Макрос
-        time.sleep(45)  
+        time.sleep(60)  
         wb.Save() # Сохранение
         wb.Worksheets("Total").ExportAsFixedFormat(0, 'C:/Users/u_180u6/Downloads/ORS.pdf') # Сохранение в PDF
         xlApp.Quit() # Выход
@@ -69,20 +71,24 @@ def EXL(): # Работа с EXl
             
 def Out():  # Отправка в Outlook
     try:
-        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.xlsx')) # Поиск
+        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.xlsx'))
         for ors in fileors:
             pass
-        filepdf = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.pdf')) # Поиск
+        filepdf = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.pdf'))
         for pdf in filepdf:
+            pass
+        filejpg = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.jpg'))
+        for jpg in filejpg:
             pass
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
         mail.To = '' # Почта
-        mail.Subject = 'Расчет ORS'
-        mail.Body = 'Расчет ORS на текущую Дату'
-        mail.HTMLBody = '<h2>Расчет ORS на текущую Дату</h2>'
+        mail.Subject = 'Расчет ORS' 
+        mail.Body = 'Расчет ORS на Дату: {day}'
+        mail.HTMLBody =  "<html><body><h3>Расчет ORS на Дату: {day} <br></h3><IMG src='C:\\Users\\u_180u6\\Downloads\\ORS.jpg'></body></html>".format(day=day)
         mail.Attachments.Add(ors)
         mail.Attachments.Add(pdf)
+        mail.Attachments.Add(jpg)
         mail.Send() # Отправка почты
         logging.info('-----OK-----')
     except:
@@ -97,18 +103,14 @@ def Out():  # Отправка в Outlook
 
 def Delete():  # Удаление лишнего
     try:
-        time.sleep(60)
-        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.xlsx')) # Поиск
-        for ors in fileors:
-            os.remove(ors)
-            pass
-        filepdf = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.pdf')) # Поиск
-        for pdf in filepdf:
-            os.remove(pdf)
-            pass
-        filedet = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_*.xlsx')) # Поиск
-        for det in filedet:
-            os.remove(det)
+        time.sleep(30)
+        filedel = glob.glob(os.path.join
+            ('C:/Users/u_180u6/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
+            ('C:/Users/u_180u6/Downloads/', 'ORS*.jpg')) + glob.glob(os.path.join
+            ('C:/Users/u_180u6/Downloads/', 'ORS*.pdf')) + glob.glob(os.path.join
+            ('C:/Users/u_180u6/Downloads/', 'detail_*.xlsx')) 
+        for delete in filedel:
+            os.remove(delete)
             pass
         logging.info('-----OK-----')
     except:
