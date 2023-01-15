@@ -7,7 +7,7 @@ import os , glob , time , logging  , win32com.client as win32
 
 logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
 
-day =  (datetime.now().replace(microsecond=0) + timedelta(days=-1))  # Дата
+day = f"{datetime.now().replace(microsecond=0) + timedelta(days=-1)}""  \U0001F642"  # Дата
 
 def TimeEXL(): # Kill EXCEL
     time.sleep(120)
@@ -82,23 +82,25 @@ def Out():  # Отправка в Outlook
             pass
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = '' # Почта
+        mail.To = '' # Отправка почты
         mail.Subject = 'Расчет ORS' 
         mail.Body = 'Расчет ORS на Дату: {day}'
-        mail.HTMLBody =  "<html><body><h3>Расчет ORS на Дату: {day} <br></h3></body></html>".format(day=day)
+        mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {day} <br></h2><img src=""cid:MyId1""></body></html>".format(day=day)
+        attachment = mail.Attachments.Add(jpg)
+        attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "MyId1")
+        mail.Attachments.Add(jpg)
         mail.Attachments.Add(ors)
         mail.Attachments.Add(pdf)
-        mail.Attachments.Add(jpg)
         mail.Send() # Отправка почты
         logging.info('-----OK-----')
     except:
         logging.exception(Out)
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = '' # Почта
+        mail.To = '' # Отправка почты
         mail.Subject = 'Неудача подчета ORS'
-        mail.Body = 'Неудача подчета ORS'
-        mail.HTMLBody = '<h2>Неудача подчета ORS</h2>'
+        mail.Body = 'Неудача подчета ORS за {day}'
+        mail.HTMLBody = "<html><body><h2>Неудача подчета ORS за {day}<br></h2><img src=""cid:MyId1""></body></html>".format(day=day)
         mail.Send() # Отправка почты    
 
 def Delete():  # Удаление лишнего
