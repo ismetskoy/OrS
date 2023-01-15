@@ -82,7 +82,7 @@ def Out():  # Отправка в Outlook
             pass
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = '' # Почта
+        mail.To = ''  # Почта
         mail.Subject = 'Расчет ORS' 
         mail.Body = 'Расчет ORS на Дату: {day}'
         mail.HTMLBody =  "<html><body><h3>Расчет ORS на Дату: {day} <br></h3></body></html>".format(day=day)
