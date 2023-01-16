@@ -58,7 +58,7 @@ def EXL(): # Работа с EXl
         xlApp = win32.Dispatch('Excel.Application')
         wb = xlApp.Workbooks.Open(det)
         xlApp.Visible = False
-        xlApp.Run('PERSONAL.XLSB!ORS_v_4_1') # Макрос
+        xlApp.Run('PERSONAL.XLSB!ORS_v_4_2') # Макрос
         time.sleep(60)  
         wb.Save() # Сохранение
         wb.Worksheets("Total").ExportAsFixedFormat(0, 'C:/Users/u_180u6/Downloads/ORS.pdf') # Сохранение в PDF
@@ -118,4 +118,4 @@ def Delete():  # Удаление лишнего
     except:
         logging.exception(Delete)
 
-start = (ORS(), Thread(target=TimeEXL).start(), EXL(), Out(), Delete()) # Поехали ;)
+start = (Delete(), ORS(), Thread(target=TimeEXL).start(), EXL(), Out(), Delete()) # Поехали ;)
