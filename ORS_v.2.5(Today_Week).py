@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
+from selenium.webdriver.common.keys import Keys
 from selenium import webdriver
 from threading import Thread
 from pathlib import *
@@ -7,7 +8,9 @@ import os , glob , time , logging  , win32com.client as win32
 
 logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
 
-day = f"{datetime.now().replace(microsecond=0) + timedelta(days=-1)}""  \U0001F642"  # Дата
+week = f"{date.today() - timedelta(date.today().weekday()):%d-%m-%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d-%m-%Y}""\N{smiling face with sunglasses}" 
+
+start_today = f'{date.today() - timedelta(date.today().weekday()):%d-%m-%Y}'
 
 def TimeEXL(): # Kill EXCEL
     time.sleep(120)
@@ -36,11 +39,14 @@ def ORS():  # Работа с сайтом ORS
             driver.get('http://ors/ors/atm/promise.html')
             time.sleep(5)
             driver.implicitly_wait(240)
-            driver.find_element(By.ID, 'searchButton').click()  # Обновить
+            driver.find_element(By.ID, 'dateFrom').click()
             time.sleep(5)
-            driver.implicitly_wait(360)
-            driver.find_element(By.ID, 'exportButtonDetail').click()  # Детальный отчет
+            driver.find_element(By.ID, 'dateFrom').send_keys(start_today)
+            time.sleep(5)
+            driver.find_element(By.ID, 'dateFrom').send_keys(Keys.RETURN)
+            driver.find_element(By.ID, 'dateFrom').send_keys(Keys.RETURN)
             start_ors = False
+            time.sleep(5)
             Poisk()
             logging.info('-----OK-----')
         except:
@@ -64,6 +70,8 @@ def EXL(): # Работа с EXl
     except:
         logging.exception(EXL)
         os.system("taskkill /f /im EXCEL.exe")
+        time.sleep(5)
+        EXL()
             
 def Out():  # Отправка в Outlook
     try:
@@ -75,10 +83,10 @@ def Out():  # Отправка в Outlook
             pass
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = '' # Отправка почты
-        mail.Subject = 'Расчет ORS' 
-        mail.Body = 'Расчет ORS на Дату: {day}'
-        mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {day} <br></h2><img src=""cid:MyId1""></body></html>".format(day=day)
+        mail.To = 'rostov_it@dnr.loc' # Отправка почты
+        mail.Subject = 'Расчет ORS в динамике' 
+        mail.Body = 'Расчет ORS на Дату: {week}'
+        mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {week} <br></h2><img src=""cid:MyId1""></body></html>".format(week=week)
         attachment = mail.Attachments.Add(jpg)
         attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "MyId1")
         mail.Attachments.Add(ors)
@@ -88,15 +96,15 @@ def Out():  # Отправка в Outlook
         logging.exception(Out)
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = '' # Отправка почты
+        mail.To = 'ISmetskoy@alfabank.ru' # Отправка почты
         mail.Subject = 'Неудача подчета ORS'
-        mail.Body = 'Неудача подчета ORS за {day}'
-        mail.HTMLBody = "<html><body><h2>Неудача подчета ORS за {day}<br></h2></body></html>".format(day=day)
+        mail.Body = 'Неудача подчета ORS за {week}'
+        mail.HTMLBody = "<html><body><h2>Неудача подчета ORS за {week}<br></h2></body></html>".format(week=week)
         mail.Send() # Отправка почты    
 
 def Delete():  # Удаление лишнего
     try:
-        time.sleep(30)
+        time.sleep(10)
         filedel = glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.jpg')) + glob.glob(os.path.join

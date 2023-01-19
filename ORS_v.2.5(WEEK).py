@@ -18,14 +18,13 @@ def TimeEXL(): # Kill EXCEL
 def Poisk(): # Ожидание загрузки файлы detail
     file_time=time.time()
     while (time.time() - file_time) < 300: 
-        filenames = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_*.xlsx'))
+        filenames = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_*.xlsx'))
         if len(filenames) > 0 :
             time.sleep(3)
             break
     else:
         logging.exception(ORS)
         os.system("taskkill /f /im msedgedriver.exe")
-        os.system("taskkill /f /im msedge.exe")
         time.sleep(15)
         ORS()
 
@@ -53,12 +52,10 @@ def ORS():  # Работа с сайтом ORSe
         except:
             logging.exception(ORS)
             os.system("taskkill /f /im msedgedriver.exe")
-            os.system("taskkill /f /im msedge.exe")
-            time.sleep(15)
 
 def EXL(): # Работа с EXl
     try:
-        filedet = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'detail_*.xlsx')) # Поиск
+        filedet = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_*.xlsx')) # Поиск
         for det in filedet:
             pass
         xlApp = win32.Dispatch('Excel.Application')
@@ -67,23 +64,21 @@ def EXL(): # Работа с EXl
         xlApp.Run('PERSONAL.XLSB!ORS_v_4_2') # Макрос
         time.sleep(60)  
         wb.Save() # Сохранение
-        wb.Worksheets("Total").ExportAsFixedFormat(0, 'C:/Users/u_180u6/Downloads/ORS.pdf') # Сохранение в PDF
         xlApp.Quit() # Выход
         logging.info('-----OK-----')
         time.sleep(5)
     except:
         logging.exception(EXL)
         os.system("taskkill /f /im EXCEL.exe")
+        time.sleep(5)
+        EXL()
             
 def Out():  # Отправка в Outlook
     try:
-        fileors = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.xlsx'))
+        fileors = glob.glob(os.path.join('C:/Users/*/Downloads/', 'ORS*.xlsx'))
         for ors in fileors:
             pass
-        filepdf = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.pdf'))
-        for pdf in filepdf:
-            pass
-        filejpg = glob.glob(os.path.join('C:/Users/u_180u6/Downloads/', 'ORS*.jpg'))
+        filejpg = glob.glob(os.path.join('C:/Users/*/Downloads/', 'ORS*.jpg'))
         for jpg in filejpg:
             pass
         outlook = win32.Dispatch('outlook.application')
@@ -94,9 +89,7 @@ def Out():  # Отправка в Outlook
         mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {week}<br></h2><img src=""cid:MyId1""></body></html>".format(week=week)
         attachment = mail.Attachments.Add(jpg)
         attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "MyId1")
-        mail.Attachments.Add(jpg)
         mail.Attachments.Add(ors)
-        mail.Attachments.Add(pdf)
         mail.Send() # Отправка почты
         logging.info('-----OK-----')
     except:
@@ -106,17 +99,16 @@ def Out():  # Отправка в Outlook
         mail.To = '' # Отправка почты
         mail.Subject = 'Неудача подчета ORS'
         mail.Body = 'Неудача подчета ORS за {week}'
-        mail.HTMLBody = '<html><body><h2>Неудача подчета ORS за: {week}<br></h2><img src=""cid:MyId1""></body></html>'.format(week=week)
+        mail.HTMLBody = '<html><body><h2>Неудача подчета ORS за: {week}<br></h2></body></html>'.format(week=week)
         mail.Send() # Отправка почты  
 
 def Delete():  # Удаление лишнего
     try:
         time.sleep(30)
         filedel = glob.glob(os.path.join
-            ('C:/Users/u_180u6/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
-            ('C:/Users/u_180u6/Downloads/', 'ORS*.jpg')) + glob.glob(os.path.join
-            ('C:/Users/u_180u6/Downloads/', 'ORS*.pdf')) + glob.glob(os.path.join
-            ('C:/Users/u_180u6/Downloads/', 'detail_*.xlsx')) 
+            ('C:/Users/*/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
+            ('C:/Users/*/Downloads/', 'ORS*.jpg'))+ glob.glob(os.path.join
+            ('C:/Users/*/Downloads/', 'detail_*.xlsx')) 
         for delete in filedel:
             os.remove(delete)
             pass
