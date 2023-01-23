@@ -8,8 +8,8 @@ from selenium.webdriver.common.keys import Keys
 
 logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
 
-day = f"{datetime.now()+ timedelta(days=-7):%d-%m-%Y}"
-week = f"{datetime.now()+ timedelta(days=-7):%d-%m-%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d-%m-%Y}""\N{smiling face with sunglasses}" 
+day = f"{datetime.now()+ timedelta(days=-7):%d.%m.%Y}"
+week = f"{datetime.now()+ timedelta(days=-7):%d.%m.%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d.%m.%Y}"" 🚀 " 
 
 def TimeEXL(): # Kill EXCEL
     time.sleep(120)
@@ -32,7 +32,6 @@ def ORS():  # Работа с сайтом ORSe
     start_ors = True
     while start_ors:
         try:
-            time.sleep(15)
             driver = webdriver.Edge()
             driver.maximize_window()
             time.sleep(3)
@@ -52,6 +51,7 @@ def ORS():  # Работа с сайтом ORSe
         except:
             logging.exception(ORS)
             os.system("taskkill /f /im msedgedriver.exe")
+            time.sleep(15)
 
 def EXL(): # Работа с EXl
     try:
@@ -70,7 +70,7 @@ def EXL(): # Работа с EXl
     except:
         logging.exception(EXL)
         os.system("taskkill /f /im EXCEL.exe")
-        time.sleep(5)
+        time.sleep(10)
         EXL()
             
 def Out():  # Отправка в Outlook
@@ -107,7 +107,7 @@ def Delete():  # Удаление лишнего
         time.sleep(30)
         filedel = glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
-            ('C:/Users/*/Downloads/', 'ORS*.jpg'))+ glob.glob(os.path.join
+            ('C:/Users/*/Downloads/', 'ORS*.jpg')) + glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'detail_*.xlsx')) 
         for delete in filedel:
             os.remove(delete)
