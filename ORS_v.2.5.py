@@ -64,6 +64,8 @@ def EXL(): # Работа с EXl
     except:
         logging.exception(EXL)
         os.system("taskkill /f /im EXCEL.exe")
+        time.sleep(10)
+        EXL()
             
 def Out():  # Отправка в Outlook
     try:
