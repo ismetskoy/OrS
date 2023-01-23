@@ -7,7 +7,7 @@ import os , glob , time , logging  , win32com.client as win32
 
 logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
 
-day = f"{datetime.now().replace(microsecond=0) + timedelta(days=-1)}""  \U0001F642"  # Дата
+day = f"{datetime.now() + timedelta(days=-1):%d.%m.%Y}"" 🚀 "  # Дата
 
 def TimeEXL(): # Kill EXCEL
     time.sleep(120)
@@ -16,7 +16,7 @@ def TimeEXL(): # Kill EXCEL
 def Poisk(): # Ожидание загрузки файлы detail
     file_time=time.time()
     while (time.time() - file_time) < 300: 
-        filenames = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_*.xlsx'))
+        filenames = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_.xlsx'))
         if len(filenames) > 0 :
             time.sleep(3)
             break
@@ -49,7 +49,7 @@ def ORS():  # Работа с сайтом ORS
 
 def EXL(): # Работа с EXl
     try:
-        filedet = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_*.xlsx')) # Поиск
+        filedet = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_.xlsx')) # Поиск
         for det in filedet:
             pass
         xlApp = win32.Dispatch('Excel.Application')
@@ -67,10 +67,10 @@ def EXL(): # Работа с EXl
             
 def Out():  # Отправка в Outlook
     try:
-        fileors = glob.glob(os.path.join('C:/Users/*/Downloads/', 'ORS*.xlsx'))
+        fileors = glob.glob(os.path.join('C:/Users/*/Downloads/', 'ORS.xlsx'))
         for ors in fileors:
             pass
-        filejpg = glob.glob(os.path.join('C:/Users/*/Downloads/', 'ORS*.jpg'))
+        filejpg = glob.glob(os.path.join('C:/Users/*/Downloads/', 'ORS.jpg'))
         for jpg in filejpg:
             pass
         outlook = win32.Dispatch('outlook.application')
@@ -98,9 +98,9 @@ def Delete():  # Удаление лишнего
     try:
         time.sleep(30)
         filedel = glob.glob(os.path.join
-            ('C:/Users/*/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
-            ('C:/Users/*/Downloads/', 'ORS*.jpg')) + glob.glob(os.path.join
-            ('C:/Users/*/Downloads/', 'detail_*.xlsx')) 
+            ('C:/Users/*/Downloads/', 'ORS.xlsx')) + glob.glob(os.path.join
+            ('C:/Users/*/Downloads/', 'ORS.jpg')) + glob.glob(os.path.join
+            ('C:/Users/*/Downloads/', 'detail_.xlsx')) 
         for delete in filedel:
             os.remove(delete)
             pass
