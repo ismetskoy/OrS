@@ -6,11 +6,33 @@ from threading import Thread
 from pathlib import *
 import os , glob , time , logging  , win32com.client as win32
 
-logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
+if not os.path.exists('C:\\ORS\\log'):
+    os.mkdir('C:\\ORS\\log')
 
-week = f"{date.today() - timedelta(date.today().weekday()):%d.%m.%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d.%m.%Y}"" 🚀 " 
+logging.basicConfig(filename = "C:\\ORS\\log\\today_week.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
+
+logging.info('path exists')
+
+week = f"{date.today() - timedelta(date.today().weekday()):%d.%m.%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d.%m.%Y}"" 📈 " 
 
 start_today = f'{date.today() - timedelta(date.today().weekday()):%d.%m.%Y}'
+
+def TimeKill():
+    file_time=time.time()
+    while (time.time() - file_time) < 555: 
+        filenames = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_*.xlsx'))
+        if len(filenames) < 1 :
+            logging.info('-----YES Bro-----')
+            time.sleep(10)
+            os.system("taskkill /f /im msedgedriver.exe")
+            os.system("taskkill /f /im msedge.exe")
+            os.system("taskkill /f /im today_week.exe")
+    else:
+        logging.info('-----NO Bro-----')
+        time.sleep(10)
+        os.system("taskkill /f /im msedgedriver.exe")
+        os.system("taskkill /f /im msedge.exe")
+        os.system("taskkill /f /im today_week.exe")
 
 def TimeEXL(): # Kill EXCEL
     time.sleep(120)
@@ -46,8 +68,8 @@ def ORS():  # Работа с сайтом ORSe
             driver.find_element(By.ID, 'dateFrom').send_keys(Keys.RETURN)
             driver.find_element(By.ID, 'dateFrom').send_keys(Keys.RETURN)
             start_ors = False
-            time.sleep(5)
             Poisk()
+            driver.quit()
             logging.info('-----OK-----')
         except:
             logging.exception(ORS)
@@ -63,7 +85,6 @@ def EXL(): # Работа с EXl
         wb = xlApp.Workbooks.Open(det)
         xlApp.Visible = False
         xlApp.Run('PERSONAL.XLSB!ORS_v_4_2') # Макрос
-        time.sleep(60)  
         wb.Save() # Сохранение
         xlApp.Quit() # Выход
         logging.info('-----OK-----')
@@ -71,7 +92,7 @@ def EXL(): # Работа с EXl
     except:
         logging.exception(EXL)
         os.system("taskkill /f /im EXCEL.exe")
-        time.sleep(10)
+        time.sleep(5)
         EXL()
             
 def Out():  # Отправка в Outlook
@@ -85,7 +106,7 @@ def Out():  # Отправка в Outlook
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
         mail.To = '' # Отправка почты
-        mail.Subject = 'Расчет ORS в динамике' 
+        mail.Subject = 'Расчет ORS в динамике'
         mail.Body = 'Расчет ORS на Дату: {week}'
         mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {week} <br></h2><img src=""cid:MyId1""></body></html>".format(week=week)
         attachment = mail.Attachments.Add(jpg)
@@ -106,6 +127,7 @@ def Out():  # Отправка в Outlook
 def Delete():  # Удаление лишнего
     try:
         time.sleep(10)
+        os.system("taskkill /f /im EXCEL.exe")        
         filedel = glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.jpg'))+ glob.glob(os.path.join
@@ -117,4 +139,4 @@ def Delete():  # Удаление лишнего
     except:
         logging.exception(Delete)
 
-start = (Delete(), ORS(), Thread(target=TimeEXL).start(), EXL(), Out(), Delete()) # Поехали ;)
+start = (Delete(), ORS(), Thread(target=TimeEXL).start(), Thread(target=TimeKill).start(), EXL(), Out(), Delete()) # Поехали ;)
