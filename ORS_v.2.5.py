@@ -105,7 +105,7 @@ def Out():  # Отправка в Outlook
             pass
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = 'ISmetskoy@alfabank.ru' # Отправка почты
+        mail.To = '' # Отправка почты
         mail.Subject = 'Расчет ORS' 
         mail.Body = 'Расчет ORS на Дату: {day}'
         mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {day} <br></h2><img src=""cid:MyId1""></body></html>".format(day=day)
@@ -118,7 +118,7 @@ def Out():  # Отправка в Outlook
         logging.exception(Out)
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
-        mail.To = 'ISmetskoy@alfabank.ru' # Отправка почты
+        mail.To = '' # Отправка почты
         mail.Subject = 'Неудача подчета ORS'
         mail.Body = 'Неудача подчета ORS за {day}'
         mail.HTMLBody = "<html><body><h2>Неудача подчета ORS за {day}<br></h2></body></html>".format(day=day)
