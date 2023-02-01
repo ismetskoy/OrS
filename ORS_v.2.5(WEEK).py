@@ -6,33 +6,10 @@ from pathlib import *
 import os , glob , time , logging  , win32com.client as win32
 from selenium.webdriver.common.keys import Keys
 
-if not os.path.exists('C:\\ORS\\log'):
-    os.mkdir('C:\\ORS\\log')
-
-logging.basicConfig(filename = "C:\\ORS\\log\\week.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
-
-logging.info('path exists')
+logging.basicConfig(filename = "log.log" , level=logging.INFO , format = '%(asctime)s %(levelname)s %(funcName)s || %(message)s') # Логи
 
 day = f"{datetime.now()+ timedelta(days=-7):%d.%m.%Y}"
-weeks = f"{datetime.now() + timedelta(weeks=-1):%U}"
-week = f"{datetime.now()+ timedelta(days=-7):%d.%m.%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d.%m.%Y}"" 👾 "  
-
-def TimeKill():
-    file_time=time.time()
-    while (time.time() - file_time) < 555: 
-        filenames = glob.glob(os.path.join('C:/Users/*/Downloads/', 'detail_*.xlsx'))
-        if len(filenames) < 1 :
-            logging.info('-----YES Bro-----')
-            time.sleep(10)
-            os.system("taskkill /f /im msedgedriver.exe")
-            os.system("taskkill /f /im msedge.exe")
-            os.system("taskkill /f /im week.exe")
-    else:
-        logging.info('-----NO Bro-----')
-        time.sleep(10)
-        os.system("taskkill /f /im msedgedriver.exe")
-        os.system("taskkill /f /im msedge.exe")
-        os.system("taskkill /f /im week.exe")
+week = f"{datetime.now()+ timedelta(days=-7):%d.%m.%Y}" " --- " f"{datetime.now() + timedelta(days=-1):%d.%m.%Y}"" 🚀 " 
 
 def TimeEXL(): # Kill EXCEL
     time.sleep(120)
@@ -68,8 +45,8 @@ def ORS():  # Работа с сайтом ORSe
             driver.find_element(By.ID, 'dateFrom').send_keys(Keys.RETURN)
             driver.find_element(By.ID, 'dateFrom').send_keys(Keys.RETURN)
             start_ors = False
+            time.sleep(5)
             Poisk()
-            driver.quit()
             logging.info('-----OK-----')
         except:
             logging.exception(ORS)
@@ -85,6 +62,7 @@ def EXL(): # Работа с EXl
         wb = xlApp.Workbooks.Open(det)
         xlApp.Visible = False
         xlApp.Run('PERSONAL.XLSB!ORS_v_4_2') # Макрос
+        time.sleep(60)  
         wb.Save() # Сохранение
         xlApp.Quit() # Выход
         logging.info('-----OK-----')
@@ -92,7 +70,7 @@ def EXL(): # Работа с EXl
     except:
         logging.exception(EXL)
         os.system("taskkill /f /im EXCEL.exe")
-        time.sleep(5)
+        time.sleep(10)
         EXL()
             
 def Out():  # Отправка в Outlook
@@ -106,9 +84,9 @@ def Out():  # Отправка в Outlook
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
         mail.To = '' # Отправка почты
-        mail.Subject = 'Расчет ORS за {weeks} неделю'.format(weeks=weeks) 
-        mail.Body = 'Неудача подчета ORS за {week}'.format(week=week)
-        mail.HTMLBody =  "<html><body><h2>Расчет ORS за {weeks} неделю: {week}<br></h2><img src=""cid:MyId1""></body></html>".format(week=week,weeks=weeks)
+        mail.Subject = 'Расчет ORS' 
+        mail.Body = 'Расчет ORS за {week}'
+        mail.HTMLBody =  "<html><body><h2>Расчет ORS на Дату: {week}<br></h2><img src=""cid:MyId1""></body></html>".format(week=week)
         attachment = mail.Attachments.Add(jpg)
         attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "MyId1")
         mail.Attachments.Add(ors)
@@ -119,15 +97,14 @@ def Out():  # Отправка в Outlook
         outlook = win32.Dispatch('outlook.application')
         mail = outlook.CreateItem(0)
         mail.To = '' # Отправка почты
-        mail.Subject = 'Расчет ORS за {weeks} неделю'.format(weeks=weeks)
+        mail.Subject = 'Неудача подчета ORS'
         mail.Body = 'Неудача подчета ORS за {week}'
-        mail.HTMLBody = '<html><body><h2>Неудача подчета ORS за {weeks} неделю: {week}<br></h2></body></html>'.format(weeks=weeks,week=week)
+        mail.HTMLBody = '<html><body><h2>Неудача подчета ORS за: {week}<br></h2></body></html>'.format(week=week)
         mail.Send() # Отправка почты  
 
 def Delete():  # Удаление лишнего
     try:
-        time.sleep(10)
-        os.system("taskkill /f /im EXCEL.exe")
+        time.sleep(30)
         filedel = glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.xlsx')) + glob.glob(os.path.join
             ('C:/Users/*/Downloads/', 'ORS*.jpg')) + glob.glob(os.path.join
@@ -139,4 +116,4 @@ def Delete():  # Удаление лишнего
     except:
         logging.exception(Delete)
 
-start = (Delete(), ORS(), Thread(target=TimeEXL).start(), Thread(target=TimeKill).start(), EXL(), Out(), Delete()) # Поехали ;)
+start = (Delete(), ORS(), Thread(target=TimeEXL).start(), EXL(), Out(), Delete()) # Поехали ;)
