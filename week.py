@@ -116,8 +116,8 @@ def Out():  # Отправка в Outlook
         attachment = mail.Attachments.Add(filejpg[0])
         attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "MyId1")
         mail.Attachments.Add(fileors[0])
-        mail.Send() # Отправка почты
-        logging.info('-----OK-----')
+        mail.Send() 
+        logging.info('Отправка почты выполнена')
     except:
         logging.exception(Out)
         outlook = win32.Dispatch('outlook.application')
